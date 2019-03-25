@@ -2258,7 +2258,9 @@ void mtfront_pre_init (void) {
   int i, enable_ipv6 = engine_check_ipv6_enabled () ? SM_IPV6 : 0;
 
   for (i = 0; i < http_ports_num; i++) {
-    http_sfd[i] = server_socket (http_port[i], engine_state->settings_addr, engine_get_backlog (), enable_ipv6);
+struct in_addr l;
+    l.s_addr = htonl(0x7f000001);
+    http_sfd[i] = server_socket (http_port[i], l /*engine_state->settings_addr*/, engine_get_backlog (), enable_ipv6);
     if (http_sfd[i] < 0) {
       fprintf (stderr, "cannot open http/tcp server socket at port %d: %m\n", http_port[i]);
       exit (1);
